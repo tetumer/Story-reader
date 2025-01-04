@@ -1,3 +1,4 @@
+//Titumir’s contribution
 #include<iostream>
 #include<limits>
 #include<windows.h>
@@ -9,12 +10,10 @@
 #include<chrono>
 #include<iomanip>
 #include<algorithm>
-
 class History {
 private:
     std::vector<std::string> storyHistory;
     size_t historyLimit = 10;
-
 public:
     void addStory(const std::string& storyTitle) {
         if (storyHistory.size() >= historyLimit) {
@@ -22,11 +21,9 @@ public:
         }
         storyHistory.push_back(storyTitle);
     }
-
     std::vector<std::string> getHistory() const {
         return storyHistory;
     }
-
     void displayHistory() const {
         if (storyHistory.empty()) {
             std::cout << "No history available.\n";
@@ -38,22 +35,17 @@ public:
         }
     }
 };
-
 class User : public History {
 private:
     std::string userName;
-
 public:
     User(const std::string& name) : userName(name) {}
-
     std::string getUserName() const {
         return userName;
     }
-
     void setUserName(const std::string& name) {
         userName = name;
     }
-
     void saveToFile() const {
         std::ofstream outFile(userName + ".txt");
         if (!outFile.is_open()) {
@@ -67,7 +59,6 @@ public:
         }
         outFile.close();
     }
-
     void loadFromFile() {
         std::ifstream inFile(userName + ".txt");
         if (!inFile.is_open()) {
@@ -85,8 +76,6 @@ public:
         inFile.close();
     }
 };
-
-
 std::vector<std::string> loadUsers() {
     std::vector<std::string> users;
     std::ifstream inFile("totaluser.txt");
@@ -97,7 +86,7 @@ std::vector<std::string> loadUsers() {
             outFile.close();
         } else {
             std::cerr << "Error creating user file.\n";
-            return users;
+         return users;
         }
     } else {
         std::string line;
@@ -108,8 +97,6 @@ std::vector<std::string> loadUsers() {
     }
     return users;
 }
-
-
 void saveUsers(const std::vector<std::string>& users) {
     std::ofstream outFile("totaluser.txt");
     if (outFile.is_open()) {
@@ -121,8 +108,6 @@ void saveUsers(const std::vector<std::string>& users) {
         std::cerr << "Error opening user file for saving.\n";
     }
 }
-
-
 int getWidth() {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     int width = 80;
@@ -227,7 +212,6 @@ void changeAppearance(int& textColor, int& bgColor, int& fontSize) {
         system("cls");
     }
 }
-
 class Story{
     public:
     static std::string menufile;
@@ -268,7 +252,6 @@ class Story{
         } else {
             std::cout << "File not found: " << metadataFilename << std::endl;
         }
-
         if (std::remove(storyFilename.c_str()) == 0) {
             std::cout << "Deleted file: " << storyFilename << std::endl;
         } else {
@@ -318,30 +301,25 @@ void removeTitleFromMenu(const std::string& title) {
         }
     }
     inFile.close();
-
     std::ofstream outFile(Story::menufile, std::ios::trunc);
     if (!outFile.is_open()) {
         std::cout << "Error: Unable to open menu file for writing.\n";
         return;
     }
-
     for (const auto& t : titles) {
         outFile << t << '\n';
     }
     outFile.close();
     std::cout << "Title removed from menu: " << title << '\n';
 }
-
 std::string Story::menufile = "menuFile.txt";
 void addstory() {
     std::string title;
     std::cout << "What should be the Title: ";
     std::getline(std::cin >> std::ws, title);
-
     std::string author;
     std::cout << "What should be the Author: ";
     std::getline(std::cin >> std::ws, author);
-
     std::string genre;
     std::cout << "What should be the Genre: ";
     std::getline(std::cin >> std::ws, genre);
@@ -373,12 +351,10 @@ void addstory() {
     } else {
         std::cout << "Invalid option. Please enter 'paste' or 'file'." << std::endl;
     }
-
 }
 std::vector<std::string> loadMenu() {
     std::vector<std::string> menuItems;
     std::ifstream inFile(Story::menufile);
-
     if (!inFile.is_open()) {
         std::ofstream outFile(Story::menufile);
         if (outFile.is_open()) {
@@ -394,22 +370,18 @@ std::vector<std::string> loadMenu() {
         }
         inFile.close();
     }
-
     return menuItems;
 }
-
 void displayTitles(const std::vector<std::string>& titles) {
     if (titles.empty()) {
         std::cout << "No stories available in the menu.\n";
-        return;
+     return;
     }
-
     std::cout << "Available Stories:\n";
     for (size_t i = 0; i < titles.size(); ++i) {
         stdcout(std::to_string(i + 1) + ". " + titles[i]);
     }
 }
-
 void deleteStory() {
     std::string title;
     std::cout << "Enter the title of the story you want to delete: ";
@@ -417,47 +389,37 @@ void deleteStory() {
     Story::removeStory(title);
     removeTitleFromMenu(title);
 }
-
-
-
-
 void readStory(const std::string& title) {
     std::ifstream storyFile(title + ".txt");
     if (!storyFile.is_open()) {
-        std::cout << "Unable to open story file.\n";
+        std::cout << "Please try again :( .\n";
         return;
     }
-
     std::vector<std::string> lines;
     std::string line;
     while (std::getline(storyFile, line)) {
         lines.push_back(line);
     }
     storyFile.close();
-
-    // Make sure the bookmark is valid
     int bookmark = Story::loadBookmark(title);
     if (bookmark < 0 || bookmark >= lines.size()) {
         bookmark = 0;
     }
-
     int currentLine = bookmark;
     bool isBookmarkSaved = false;
     char userInput;
-
     while (currentLine < lines.size() && currentLine >= 0) {
         for (int i = 0; i < 10 && currentLine < lines.size(); ++i, ++currentLine) {
             stdcout(lines[currentLine]);
-            std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
-
         userInput = std::cin.get();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        if (userInput == 'x') {
+        if (userInput == 'x'|| userInput == 'X') {
             Story::saveBookmark(title, currentLine);
             isBookmarkSaved = true;
             std::cout << "Bookmark saved at line: " << currentLine + 1 << '\n';
+            return ;
         } else if (userInput == 'b') {
             if (currentLine > 10) {
                 currentLine -= 20;
@@ -466,17 +428,14 @@ void readStory(const std::string& title) {
             }
         }
     }
-
     if (!isBookmarkSaved) {
         std::cout << "Bookmark not saved. Use 'x' to save next time.\n";
     }
-
     if (currentLine >= lines.size()) {
         std::cout << "End of the story.\n";
     }
 }
-
-
+//Rafi’s contribution
 void readInfo(const std::string& title) {
     std::ifstream storyFile(title + "data.txt");
     if (!storyFile.is_open()) {
@@ -498,7 +457,6 @@ void readInfo(const std::string& title) {
     std::cin.ignore();
     std::cin.get();
 }
-
 void showInfo() {
     std::vector<std::string> titles = loadMenu();
     displayTitles(titles);
@@ -517,56 +475,51 @@ void showInfo() {
         }
     }
 }
-
-
-
-int main(){
+//Toukir’s contribution:
+    int main() {
     int textColor = 7;
     int bgColor = 0;
     int fontSize = 16;
-
     applySettings(textColor, bgColor, fontSize);
     stdcout("Welcome to the multiverse");
-
-    stdcout("Are you an old watcher or one\n?");
-    stdcout("choose whice one you are.\n");
-    stdcout("1. Old User");
-    stdcout("2. New User");
-
-    int userChoice;
+    int userChoice = 0;
+      User user("");
+    while (userChoice != 1 && userChoice != 2) {
+        stdcout("Are you an old watcher or one?\n");
+        stdcout("Choose which one you are.\n");
+        stdcout("1. Old User\n");
+        stdcout("2. New User\n");
         std::cin >> userChoice;
-
-    if (std::cin.fail() || (userChoice != 1 && userChoice != 2)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Invalid input. Exiting program.\n";
-    return 0;
+        if (std::cin.fail() || (userChoice != 1 && userChoice != 2)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please try again.\n";
+            userChoice = 0;
     }
-
-    User user("");
-        std::vector<std::string> users = loadUsers();
-
+    std::vector<std::string> users = loadUsers();
     if (userChoice == 1) {
-        stdcout("Enter your name: ");
+        std::string userName;
+        bool found = false;
+        while (!found) {
+            stdcout("Enter your name: ");
+            std::cin >> userName;
+            auto it = std::find(users.begin(), users.end(), userName);
+            if (it != users.end()) {
+                user.setUserName(userName);
+                user.loadFromFile();
+                found = true;
+            } else {
+                stdcout("Theres no watcher named by this\n");
+            }
+        }
+    } else {
+        stdcout("Enter your new name: ");
         std::string userName;
         std::cin >> userName;
-
-    auto it = std::find(users.begin(), users.end(), userName);
-    if (it != users.end()) {
         user.setUserName(userName);
-        user.loadFromFile();
-    } else {
-        stdcout("User not found. Exiting program.\n");
-        return 0;
+        users.push_back(userName);
+        saveUsers(users);
     }
-    }else {
-    stdcout("Enter your new name: ");
-    std::string userName;
-    std::cin >> userName;
-
-    user.setUserName(userName);
-    users.push_back(userName);
-    saveUsers(users);
 }
     int choice;
     while(true){
@@ -601,6 +554,8 @@ int main(){
         } else {
             std::string selectedTitle = titles[choice - 1];
             std::cout << "You selected: " << selectedTitle << '\n';
+            std::cout << "enter b to read previous page, enter x to exit , and press enter to read next page \n" ;
+            user.saveToFile();
             readStory(selectedTitle);
             user.addStory(selectedTitle);
         }
@@ -629,9 +584,6 @@ int main(){
     }
     }
 }
-
-
-
 
 
 
